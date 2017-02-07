@@ -12,40 +12,6 @@ function fibonacciBases(inputString) {
   return result
 }
 
-function decimalToFibonacci (inputNumber) {
-  let number = inputNumber
-  const result = []
-
-  fib.reset()
-
-  findBiggestFibDivisor(number)
-
-  number -= fib.prev()
-  result.push(1)
-
-  while (true) {
-    if (number / fib.prev() > 1) {
-      number -= fib.current
-      result.push(1)
-    } else {
-      result.push(0)
-    }
-
-    if (fib.current === 1 && fib.previous === 0) {
-      result.push(0)
-      break
-    }
-  }
-
-  return result
-}
-
-function findBiggestFibDivisor (number) {
-  while (number / fib.next() > 1) {}
-  fib.prev()
-  fib.prev()
-}
-
 const fib = {
   previous: 0,
   current: 1,
@@ -53,32 +19,63 @@ const fib = {
     this.previous = 0
     this.current = 1
   },
+  cur: function () {
+    return this.current
+  },
   next: function () {
-    const current = this.current
     const next = this.current + this.previous
     this.previous = this.current
     this.current = next
-    return current
+    return this.current
   },
   prev: function () {
-    const current = this.current
     if (this.current === 1 && this.previous === 0) {
-      return current
+      return this.previous
     }
     const prevPrev = this.current - this.previous
     this.current = this.previous
     this.previous = prevPrev
-    return current
+    return this.current
   }
 }
 
 function fibonacciToDecimal (number) {
-  const numberArray = number.toString().split('')
+  const digitArray = number.toString().split('')
 
   fib.reset()
 
-  return numberArray.reduceRight(
-    (accumulator, currentDigit) => accumulator + currentDigit * fib.next(),
+  let firstTime = true
+
+  return digitArray.reduceRight(
+    (accumulator, currentDigit) => {
+      if (firstTime) {
+        firstTime = false
+        return accumulator + currentDigit * fib.cur()
+      } else {
+        return accumulator + currentDigit * fib.next()
+      }
+    },
     0
   )
+}
+
+function decimalToFibonacci (inputNumber) {
+  let number = inputNumber
+
+  const result = []
+
+  fib.reset()
+
+  while (number / fib.next() >= 1) {}
+
+  while (fib.prev() !== 0) {
+    if (number / fib.cur() >= 1) {
+      number -= fib.cur()
+      result.push(1)
+    } else {
+      result.push(0)
+    }
+  }
+
+  return result.join('')
 }
