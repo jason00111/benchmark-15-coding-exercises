@@ -50,9 +50,7 @@ const tilesRemaining = {
   _: 2
 }
 
-//-----------------------------------
 console.log('\nScrabble Tiles Reamining Calculator\n\nEnter uppercase characters representing the tiles that have been played.\n\'_\' represents a blank tile.\nExample: AERETOXMYCNS_B\n(type exit to exit)\n')
-
 
 rl.on('line', input => {
   if (input === 'exit') process.exit()
