@@ -74,7 +74,7 @@ rl.on('line', input => {
 
     histogram.reverse()
 
-    console.log('\nRemaining Tiles:\n')
+    console.log('\nRemaining Tiles\n')
 
     histogram.forEach((binArray, frequency) => {
       if (binArray.length !== 0)
