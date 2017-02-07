@@ -5,20 +5,16 @@ const rl = readline.createInterface({
   output: process.stdout
 })
 
-
-function randomNumber () {
+const randomNumber = () => {
   return Math.floor(Math.random() * 100) + 1
 }
 
-
 let numberToGuess = randomNumber()
-
 
 console.log('\nGuess a number between 1 and 100 (type exit to exit)\n')
 
-
 rl.on('line', input => {
-  if (input === 'exit') process.exit()//rl.close()
+  if (input === 'exit') process.exit()
 
   else {
     if (parseInt(input) === numberToGuess) {
