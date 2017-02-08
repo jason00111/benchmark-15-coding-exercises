@@ -97,7 +97,7 @@ testInstance3.stdout.on('data', (output) => {
 testInstance4.stdout.on('data', (output) => {
   const outputString = output.toString()
 
-  console.log('outputString:', outputString)
+  // console.log('outputString:', outputString)
 
   if (outputString.includes('Scrabble')) {
     testInstance4.stdin.write(`ZZ\n`)

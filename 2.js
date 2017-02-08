@@ -1,23 +1,22 @@
-const readline = require('readline')
-
-const rl = readline.createInterface({
+const readline = require('readline').createInterface({
   input: process.stdin,
   output: process.stdout
 })
 
 const isValidTile = character => {
-  if (typeof character !== 'string') return false
+  const UPPERCASE_A_CODE = 65
+  const UPPERCASE_B_CODE = 90
+  const UNDERSCORE_CODE = 95
+
+  if (typeof character !== 'string') {
+    return false
+  }
 
   const characterCode = character.charCodeAt(0)
 
-  if (
-    (characterCode >= 65 && characterCode <= 90)
-      || characterCode === 95
-  ) {
-    return true
-  } else {
-    return false
-  }
+  return (
+    characterCode >= UPPERCASE_A_CODE && characterCode <= UPPERCASE_B_CODE
+  ) || characterCode === UNDERSCORE_CODE
 }
 
 const tilesRemaining = {
@@ -50,25 +49,34 @@ const tilesRemaining = {
   _: 2
 }
 
-console.log('\nScrabble Tiles Reamining Calculator\n\nEnter uppercase characters representing the tiles that have been played.\n\'_\' represents a blank tile.\nExample: AERETOXMYCNS_B\n(type exit to exit)\n')
+console.log(`
+Scrabble Tiles Reamining Calculator
 
-rl.on('line', input => {
+Enter uppercase characters representing the tiles that have been played.
+'_' represents a blank tile.
+Example: AERETOXMYCNS_B
+(type exit to exit)
+`)
+
+readline.on('line', input => {
   if (input === 'exit') process.exit()
 
   else {
     input.toString().split('').forEach(tile => {
       if (!isValidTile(tile)) {
-        console.error(`\nERROR: '${tile}' is not a valid tile.\nPlease use uppercase characters A-Z or _`)
+        console.error(`\nERROR: '${tile}' is not a valid tile.`
+          + `\nPlease use uppercase characters A-Z or _`)
       } else if (tilesRemaining[tile] > 0) {
         tilesRemaining[tile]--
       } else {
-        console.error(`\nERROR: Cannot remove tile '${tile}' since there are no more remaining.`)
+        console.error(`\nERROR: Cannot remove tile '${tile}' `
+          + `since there are no more remaining.`)
       }
     })
 
     const histogram = Array(13).fill(null).map(() => [])
 
-    for (var tile in tilesRemaining) {
+    for (let tile in tilesRemaining) {
       histogram[tilesRemaining[tile]].push(tile)
     }
 
@@ -81,6 +89,7 @@ rl.on('line', input => {
         console.log(`${12 - frequency}:`, binArray.join(', '))
     })
 
-    console.log('\nEnter more tiles that have been played to see the remaining tiles.\n')
+    console.log('\nEnter more tiles that have '
+      + 'been played to see the remaining tiles.\n')
   }
 })
