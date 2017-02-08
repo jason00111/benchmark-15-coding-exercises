@@ -1,4 +1,4 @@
-function fibonacciBases(inputString) {
+module.exports = function fibonacciBases (inputString) {
   const inputArray = inputString.split(' ')
 
   let result
@@ -40,7 +40,7 @@ const fib = {
 }
 
 function fibonacciToDecimal (number) {
-  const digitArray = number.toString().split('')
+  const digitArray = number.split('')
 
   fib.reset()
 
@@ -56,11 +56,11 @@ function fibonacciToDecimal (number) {
       }
     },
     0
-  )
+  ).toString()
 }
 
 function decimalToFibonacci (inputNumber) {
-  let number = inputNumber
+  let number = parseInt(inputNumber)
 
   const result = []
 
