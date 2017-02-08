@@ -36,8 +36,26 @@ function formatDate (date) {
 
 const fullYear = year => year < 50 ? `20${year}` : `19${year}`
 
-const monthToNumber = month => months.indexOf(month) < 10
+const monthToNumber = month => months.indexOf(month) < 9
   ? '0' + (months.indexOf(month) + 1)
   : months.indexOf(month) + 1
 
-module.exports = {formatDate}
+function formatDatesInFile() {
+  const fileSystem = require('fs')
+
+  const inputFile = require('readline').createInterface({
+    input: fileSystem.createReadStream('dates.txt')
+  })
+
+  fileSystem.unlink('formatted-dates.txt', () => {})
+
+  const outputFile = fileSystem.createWriteStream('formatted-dates.txt', {
+    flags: 'a'
+  })
+
+  inputFile.on('line', date => outputFile.write(formatDate(date) + '\n'))
+
+  inputFile.on('close', () => outputFile.end())
+}
+
+module.exports = {formatDate, formatDatesInFile}

@@ -1,6 +1,6 @@
 const assert = require('assert')
 
-const {formatDate} = require('./7')
+const {formatDate, formatDatesInFile} = require('./7')
 
 assert.equal(formatDate('09#65#21'), '1965-09-21')
 assert.equal(formatDate('Dec 26, 75'), '1975-12-26')
@@ -10,3 +10,7 @@ assert.equal(formatDate('01/11/55'), '1955-01-11')
 assert.equal(formatDate('Mar 21, 1980'), '1980-03-21')
 
 console.log('All tests passed')
+
+console.log('Formatting dates in \'dates.txt\' into file \'formatted-dates.txt\'')
+
+formatDatesInFile()
