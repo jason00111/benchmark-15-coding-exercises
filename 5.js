@@ -6,7 +6,7 @@ const arrayToString = array => array.join('')
 
 const filterOutVowels = characters => characters.filter(
   character => character !== 'a'
-            && character !== 'a'
+            && character !== 'e'
             && character !== 'i'
             && character !== 'o'
             && character !== 'u'
