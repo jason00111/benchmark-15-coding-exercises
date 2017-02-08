@@ -1,6 +1,6 @@
 const assert = require('assert')
 
-const pathTo4chan = require('./6')
+const findPath = require('./6')
 
 const jsonObject = `{
   "name": "William Shakespeare",
@@ -23,6 +23,6 @@ const jsonObject = `{
   ]
 }`
 
-assert(pathTo4chan(jsonObject) === 'favoriteSites -> 1')
+assert(findPath(jsonObject, '4chan') === 'favoriteSites -> 1')
 
 console.log('All tests have passed')
