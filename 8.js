@@ -1,82 +1,121 @@
-const real = new Float32Array(2);
-const imag = new Float32Array(2);
-const ac = new AudioContext();
-const osc1 = ac.createOscillator();
-const osc2 = ac.createOscillator();
+const real = new Float32Array(2)
+const imag = new Float32Array(2)
+const audioContext = new AudioContext()
+const oscillator1 = audioContext.createOscillator()
+const oscillator2 = audioContext.createOscillator()
+const oscillator3 = audioContext.createOscillator()
+const oscillator4 = audioContext.createOscillator()
 
-real[0] = 0;
-imag[0] = 0;
+real[0] = 0
+imag[0] = 0
 real[1] = 1
-imag[1] = 0;
+imag[1] = 0
 real[2] = 0.7
-imag[2] = 0;
+imag[2] = 0
 real[3] = 0.5
-imag[3] = 0;
+imag[3] = 0
 real[4] = 0.3
-imag[4] = 0;
+imag[4] = 0
 real[5] = 0.2
-imag[5] = 0;
+imag[5] = 0
 real[6] = 0.1
-imag[6] = 0;
+imag[6] = 0
 
-const wave1 = ac.createPeriodicWave(real, imag);
-const wave2 = ac.createPeriodicWave(real, imag);
+const wave1 = audioContext.createPeriodicWave(real, imag)
 
-osc1.setPeriodicWave(wave1);
-osc2.setPeriodicWave(wave1);
-osc1.setPeriodicWave(wave2);
-osc2.setPeriodicWave(wave2);
+oscillator1.setPeriodicWave(wave1)
+oscillator2.setPeriodicWave(wave1)
+oscillator3.setPeriodicWave(wave1)
+oscillator4.setPeriodicWave(wave1)
 
-osc1.connect(ac.destination);
-osc2.connect(ac.destination);
+const gainNode1 = audioContext.createGain()
+const gainNode2 = audioContext.createGain()
 
-const C = 440 * 3 / 5 //4/3 * 5/4
-osc1.frequency.value = 440
-osc2.frequency.value = C
+oscillator1.connect(gainNode1)
+oscillator2.connect(gainNode2)
+oscillator3.connect(gainNode2)
+oscillator4.connect(gainNode2)
 
-const D = C * 3 / 2
-const SD = C * 4 / 3
+gainNode1.gain.value = 0.5
+gainNode2.gain.value = 0
 
+gainNode1.connect(audioContext.destination)
+gainNode2.connect(audioContext.destination)
 
-osc1.start();
-osc2.start();
+const C4 = 440 * 3 / 5
+const G4 = C4 * 3 / 2
+const F4 = C4 * 4 / 3
+const E4 = C4 * 5 / 4
+const B4 = G4 * 5 / 4
+const A4 = F4 * 5 / 4
+const D4 = G4 * 3 / 4
+const C5 = C4 * 2
+const C3 = C4 / 2
+const G3 = G4 / 2
+const B3 = B4 / 2
 
-while (ac.currentTime < 2) {
-  5// console.log(ac.currentTime)
-}
+oscillator1.frequency.value = C4
 
-osc1.frequency.value = D
-osc2.frequency.value = D / 2
+oscillator1.start()
 
-console.log('osc1:', osc1)
-console.log('osc2:', osc2)
+while (audioContext.currentTime < 1) {}
 
+oscillator1.frequency.value = D4
 
-while (ac.currentTime < 4) {
-  5// console.log(ac.currentTime)
-}
+while (audioContext.currentTime < 2) {}
 
-osc1.frequency.value = SD
-osc2.frequency.value = C / 2
+oscillator1.frequency.value = E4
 
-console.log('osc1:', osc1)
-console.log('osc2:', osc2)
+while (audioContext.currentTime < 3) {}
 
-while (ac.currentTime < 6) {
-  5// console.log(ac.currentTime)
-}
+oscillator1.frequency.value = F4
 
-osc1.stop(0);
-osc2.stop(0);
+while (audioContext.currentTime < 4) {}
 
+oscillator1.frequency.value = G4
 
+while (audioContext.currentTime < 5) {}
 
+oscillator1.frequency.value = A4
 
+while (audioContext.currentTime < 6) {}
 
+oscillator1.frequency.value = B4
 
+while (audioContext.currentTime < 7) {}
 
+oscillator1.frequency.value = C5
 
-1234567
-1234567
-1234567
-1234567
+while (audioContext.currentTime < 8) {}
+
+gainNode1.gain.value = 0
+
+oscillator1.frequency.value = G3
+oscillator2.frequency.value = C4
+oscillator3.frequency.value = E4
+oscillator4.frequency.value = G4
+
+oscillator2.start()
+oscillator3.start()
+oscillator4.start()
+
+while (audioContext.currentTime < 10) {}
+
+gainNode1.gain.value = 0.5
+gainNode2.gain.value = 0.5
+
+while (audioContext.currentTime < 12) {}
+
+oscillator2.frequency.value = B3
+oscillator3.frequency.value = D4
+
+while (audioContext.currentTime < 14) {}
+
+oscillator1.frequency.value = C3
+oscillator2.frequency.value = C4
+oscillator3.frequency.value = E4
+
+while (audioContext.currentTime < 18) {}
+
+gainNode1.gain.value = 0
+gainNode2.gain.value = 0
