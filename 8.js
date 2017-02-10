@@ -1,46 +1,30 @@
+const audioContext = new AudioContext()
+
+let oscillators = Array(4).fill(null)
+
+oscillators = oscillators.map(() => audioContext.createOscillator())
+
+const harmonicLevels = [ 0, 1, 0.7, 0.5, 0.3, 0.2, 0.1 ]
+
 const real = new Float32Array(2)
 const imag = new Float32Array(2)
-const audioContext = new AudioContext()
-const oscillator1 = audioContext.createOscillator()
-const oscillator2 = audioContext.createOscillator()
-const oscillator3 = audioContext.createOscillator()
-const oscillator4 = audioContext.createOscillator()
 
-real[0] = 0
-imag[0] = 0
-real[1] = 1
-imag[1] = 0
-real[2] = 0.7
-imag[2] = 0
-real[3] = 0.5
-imag[3] = 0
-real[4] = 0.3
-imag[4] = 0
-real[5] = 0.2
-imag[5] = 0
-real[6] = 0.1
-imag[6] = 0
+harmonicLevels.forEach((level, index) => {
+  real[index] = level
+  imag[index] = 0
+})
 
-const wave1 = audioContext.createPeriodicWave(real, imag)
+const wave = audioContext.createPeriodicWave(real, imag)
 
-oscillator1.setPeriodicWave(wave1)
-oscillator2.setPeriodicWave(wave1)
-oscillator3.setPeriodicWave(wave1)
-oscillator4.setPeriodicWave(wave1)
+const gainNode = audioContext.createGain()
+gainNode.gain.value = 0.5
 
-const gainNode1 = audioContext.createGain()
-const gainNode2 = audioContext.createGain()
+oscillators.forEach(oscillators => {
+  oscillators.setPeriodicWave(wave)
+  oscillators.connect(gainNode)
+})
 
-oscillator1.connect(gainNode1)
-oscillator2.connect(gainNode2)
-oscillator3.connect(gainNode2)
-oscillator4.connect(gainNode2)
-
-gainNode1.gain.value = 0.5
-gainNode2.gain.value = 0
-
-gainNode1.connect(audioContext.destination)
-gainNode2.connect(audioContext.destination)
+gainNode.connect(audioContext.destination)
 
 const C4 = 440 * 3 / 5
 const G4 = C4 * 3 / 2
@@ -61,108 +45,51 @@ const A2 = A3 / 2
 const F3 = F4 / 2
 const E2 = E3 / 2
 
-oscillator1.frequency.value = C4
+const chords = [
+          [ 1, G4, C4, G3, E2 ],
+          [ 1, F4, C4, A3, F2 ],
+          [ 1, E4, C4, G3, G2 ],
+          [ 1, C4, C4, E3, A2 ],
+          [ 1, D4, C4, A3, F2 ],
+          [ .5, D4, B3, G3, G2 ],
+          [ .5, D4, B3, F3, G2 ],
+          [ 2, C4, C4, E3, C3 ]
+]
 
-oscillator1.start()
+const scale = [
+  [1, C4],
+  [1, D4],
+  [1, E4],
+  [1, F4],
+  [1, G4],
+  [1, A4],
+  [1, B4],
+  [1, C5],
+]
 
-while (audioContext.currentTime < 1) {}
+oscillators[0].start()
+oscillators[1].start()
+oscillators[2].start()
+oscillators[3].start()
 
-oscillator1.frequency.value = D4
 
-while (audioContext.currentTime < 2) {}
+const playTheNotes = notes => {
+  let now
+  for (let note of notes) {
+    console.log('playing frequency', note[1], 'for', note[0], `[${audioContext.currentTime}]`)
+    oscillators.forEach(
+      (oscillator, index) => oscillator.frequency.value = note[index + 1]
+    )
+    now = audioContext.currentTime
+    while (audioContext.currentTime < now + note[0]) {}
+  }
+}
 
-oscillator1.frequency.value = E4
+playTheNotes(chords)
 
-while (audioContext.currentTime < 3) {}
 
-oscillator1.frequency.value = F4
+gainNode.gain.value = 0
 
-while (audioContext.currentTime < 4) {}
 
-oscillator1.frequency.value = G4
-
-while (audioContext.currentTime < 5) {}
-
-oscillator1.frequency.value = A4
-
-while (audioContext.currentTime < 6) {}
-
-oscillator1.frequency.value = B4
-
-while (audioContext.currentTime < 7) {}
-
-oscillator1.frequency.value = C5
-
-while (audioContext.currentTime < 8) {}
-
-gainNode1.gain.value = 0
-
-oscillator1.frequency.value = G4
-oscillator2.frequency.value = C4
-oscillator3.frequency.value = G3
-oscillator4.frequency.value = E2
-
-oscillator2.start()
-oscillator3.start()
-oscillator4.start()
-
-while (audioContext.currentTime < 10) {}
-
-gainNode1.gain.value = 0.5
-gainNode2.gain.value = 0.5
-
-while (audioContext.currentTime < 11) {}
-
-oscillator1.frequency.value = F4
-oscillator2.frequency.value = C4
-oscillator3.frequency.value = A3
-oscillator4.frequency.value = F2
-
-while (audioContext.currentTime < 12) {}
-
-oscillator1.frequency.value = E4
-oscillator2.frequency.value = C4
-oscillator3.frequency.value = G3
-oscillator4.frequency.value = G2
-
-while (audioContext.currentTime < 13) {}
-
-oscillator1.frequency.value = C4
-oscillator2.frequency.value = C4
-oscillator3.frequency.value = E3
-oscillator4.frequency.value = A2
-
-while (audioContext.currentTime < 14) {}
-
-oscillator1.frequency.value = D4
-oscillator2.frequency.value = C4
-oscillator3.frequency.value = A3
-oscillator4.frequency.value = F2
-
-while (audioContext.currentTime < 15) {}
-
-oscillator1.frequency.value = D4
-oscillator2.frequency.value = B3
-oscillator3.frequency.value = G3
-oscillator4.frequency.value = G2
-
-while (audioContext.currentTime < 15.5) {}
-
-oscillator1.frequency.value = D4
-oscillator2.frequency.value = B3
-oscillator3.frequency.value = F3
-oscillator4.frequency.value = G2
-
-while (audioContext.currentTime < 16) {}
-
-oscillator1.frequency.value = C4
-oscillator2.frequency.value = C4
-oscillator3.frequency.value = E3
-oscillator4.frequency.value = C3
-
-while (audioContext.currentTime < 18) {}
-
-gainNode1.gain.value = 0
-gainNode2.gain.value = 0
 
 // Rustington -Hubert Parry
