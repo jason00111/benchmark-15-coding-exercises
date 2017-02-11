@@ -1,15 +1,18 @@
+//----- global variables
+
 const audioContext = new AudioContext()
 
 const gainNode = audioContext.createGain()
 gainNode.gain.value = 0.5
 gainNode.connect(audioContext.destination)
 
-// base = 440
+base = 220
+
+let oscillators = Array(2).fill(null)
+
+//----- functions
 
 function initializeOcillators (numberOfOcillators) {
-
-  let oscillators = Array(2).fill(null)
-
   oscillators = oscillators.map(() => audioContext.createOscillator())
 
   oscillators.forEach(oscillators => {
@@ -43,25 +46,42 @@ const chords = [
   [base * 1/2, base]
 ]
 
-base = 220
 
 const chords2 = [
-  // [base * 3/2, base * 2],
   [base * 3/2, base * 3/2 * 3/2], //9/8
   [base * 1, base * 2]
 ]
 
 const chords3 = [
-  // [base * 3/2, base * 2],
   [base * 3/2, base * 3/2 * 5/4], //15/16
   [base * 1, base * 2]
 ]
 
-initializeOcillators(2)
-turnOnOcillators(2)
+const chords4 = [
+  [base * 3/2, base * 2],
+  [base * 1,   base * 2]
+]
 
-playTheNotes(chords2.concat(chords3).map(notes => [1, ...notes]))
-// playTheNotes(chords2.map(notes => [1, ...notes]))
+const chords5 = [
+  [base * 3/4, base], //2
+  [base * 1/2, base]
+]
+
+
+let chords6 = [
+  [3/2, 2],
+  [1,   2]
+]
+
+chords6 = chords6.map(time => time.map(ratio => ratio * base))
+// ratio===chord
+
+initializeOcillators(2)
+
+playTheNotes(chords6.map(notes => [2, ...notes]))
+
+
+//----- more functions
 
 function volumeOff () {
   gainNode.gain.value = 0
@@ -69,12 +89,6 @@ function volumeOff () {
 
 function volumeOn (volume = 0.5) {
   gainNode.gain.value = volume
-}
-
-function turnOnOcillators (numberOfOcillators) {
-  for (let index = 0; index < numberOfOcillators; index++) {
-    oscillators[index].start()
-  }
 }
 
 function showFrequencies() {
@@ -110,39 +124,3 @@ function playTheNotes (notes) {
 
   volumeOff()
 }
-
-/*
-// spectrum
-// const generateChords =
-
-// const C4 = 440 * 3 / 5
-// const G4 = C4 * 3 / 2
-// const F4 = C4 * 4 / 3
-// const E4 = C4 * 5 / 4
-// const B4 = G4 * 5 / 4
-// const A4 = F4 * 5 / 4
-// const D4 = G4 * 3 / 4
-// const C5 = C4 * 2
-// const C3 = C4 / 2
-// const G3 = G4 / 2
-// const B3 = B4 / 2
-// const A3 = A4 / 2
-// const F2 = F4 / 4
-// const G2 = G3 / 2
-// const E3 = E4 / 2
-// const A2 = A3 / 2
-// const F3 = F4 / 2
-// const E2 = E3 / 2
-
-const chords = [
-  [ 1, G4, C4, G3, E2 ],
-  [ 1, F4, C4, A3, F2 ],
-  [ 1, E4, C4, G3, G2 ],
-  [ 1, C4, C4, E3, A2 ],
-  [ 1, D4, C4, A3, F2 ],
-  [.5, D4, B3, G3, G2 ],
-  [.5, D4, B3, F3, G2 ],
-  [ 2, C4, C4, E3, C3 ]
-]
-// Rustington -Hubert Parry
-*/
